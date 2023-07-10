@@ -1,6 +1,6 @@
 import React from 'react'
 import {  CardBody, Button } from 'reactstrap'
-import AddOnsImg from '../assets/images/addons.webp'
+import AddOnsImg from '../assets/images/productimage.png'
 import { Link } from 'react-router-dom'
 
 function AddOnsCard() {
@@ -14,13 +14,13 @@ function AddOnsCard() {
             </div>
             <CardBody>
              <div>
-             <Button style={{background:'#f2f4f7',border:'none', borderRadius:'20px',color:'#6042EC'}}  className=''>Add-on</Button>
+             <Button style={{background:'#f2f4f7',border:'none', borderRadius:'20px',color:'#6042EC',fontSize:'14px'}}>Add-on</Button>
              </div>
              <div>
-                <h4 className='pt-3 text-light-emphasis fw-600' style={{lineHeight:'1.5'}}>449+ AI Software & Tools</h4>
+                <h5 className='pt-3 text-light-emphasis fw-600' style={{lineHeight:'1.5'}}>449+ AI Software & Tools</h5>
              </div>
-             <div>
-                  <Button className='mt-4 w-100  fs-5 ' 
+             <div> 
+                  <Button className='mt-4 w-100  fs-6 ' 
                   style={{padding:'12px',background:'#6042EC',fontWeight:'600',borderRadius:'15px',border:'none'}} >
                     Sign up
                     </Button>

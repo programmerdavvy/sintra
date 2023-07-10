@@ -1,51 +1,78 @@
-import React, { useState } from 'react'
 import { Row ,Col,Button} from 'react-bootstrap';
-import Logo from '../assets/images/logo.png';
+import Logo from '../assets/images/nyxil_logo.png';
 import LoginImg from '../assets/images/login-i.png';
 import LinImg from '../assets/images/lin.png';
 
 import { Link } from 'react-router-dom';
-import { ArrowRight, ChevronRight } from 'react-feather';
+import { ArrowRight } from 'react-feather';
+import axios from 'axios'
 
 function Signup() {
 
-const [activeTab,setActiveTab] = useState('Password');
+  const handleSignup = async () => {
+    const data =  {
+      "FullName" : "Chris",
+      "Email" : "ebukaugwulast@gmail.com",
+      "Password" : "chris100"
+  } 
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
 
+    const requestOptions = {
+      method: 'GET',
+      headers: headers,
+    };
 
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
-
+    fetch('https://backend.nyxil.studio/api/fetch/Register', requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        // Display the API response data on the front end
+       console.log(JSON.stringify(data));
+      })
+      .catch(error => {
+        // Handle any errors that occur during the API request
+        console.error(error);
+      });
+  }  
+    // const response = await (axios.post('https://test.aprojects.com.ng/api/fetch/Register',data));
+    // console.log(response.data)
+  
+   // fetch('https://backend.nyxil.studio/Api/fetch/loginv1',{
+    //  headers:{
+    //   "Content-Type": "application/json",
+    //  },
+    //  method:'POST',
+    //  body: JSON.stringify(data
+    // })
+    // .then(post => {
+    // console.log(post);
+    // });
   return (
     <>
         <Row className='w-100'>
-            <Col  className='w-100' style={{padding:'40px'}}>
-            <div className=''>
-            <div>
-            <Link to='/'> <img src={Logo} className='img-fluid' width='120' alt='logo'/></Link>
+            <Col  className='w-100 promptsHeaderContainer'> 
+            <div className='mt-4'>
+            <Link to='/'> <img src={Logo} className='img-fluid' width='90' alt='logo'/></Link>
             </div>
-            <div className="logins__container p-5">
+            <div className="logins__container promptsHeaderContainer pt-5">
                   <div className="logins__content">
                     <div className="logins__content__header">
                       <h1 className="logins__title">Sign up</h1>
-                      <p className="text-md fs-5 pt-2">
-                      Create your Sintra AI account.
+                      <p className="text-md fs-6 pt-2">
+                      Create your Nyxil Studio AI account.
                       </p>
                     </div>
-                    <div className='p-4 d-flex' 
-                    style={{
-                      border:'1px solid #C5BBFA',
-                      borderRadius:'10px',
-                      width:'120%'
-                  }}
+                    <div className='signupboard p-4 d-flex flex-direction-row' 
                     >
                       <div>
                       <img src={LinImg} className='img-fluid ' width='30' alt='logo'/>
                       </div>
-                      <div className='mx-4'>
-                        <div className='fw-600 fs-5' style={{color:'#5D57D9'}}>Log in for existing customers</div>
-                        <div className='fw-600 fs-5' style={{color:'#5D57D9'}}>Already purchased from Sintra?</div>
-                        <div className='fw-600 fs-5' style={{color:'#5D57D9'}}><Link className='text-decoration-none'>Log in <ArrowRight size={25}/></Link></div>
+                      <div className='signupboardleft'style={{fontSize:'13px'}} >
+                        <div className='fw-600' style={{color:'#5D57D9'}}>Log in for existing customers</div>
+                        <div className='fw-600' style={{color:'#5D57D9'}}>Already purchased from Nyxil Studio?</div>
+                        <div className='fw-600' style={{color:'#5D57D9'}}>
+                          <Link className='text-decoration-none fs-7'>Log in <ArrowRight size={20}/></Link>
+                          </div>
                       </div>
                     </div>
                     <div className="logins__tabs w-tabs">
@@ -54,13 +81,7 @@ const [activeTab,setActiveTab] = useState('Password');
                             <form
                               id="password-form"
                               name="wf-form-Login-Form"
-                              data-name="Login Form"
-                              redirect="/tasks"
-                              data-redirect="/tasks"
-                              method="get"
                               className="logins__form"
-                              aria-label="Login Form"
-                              data-gtm-form-interact-id="1"
                             >
                               <div className="logins__inputs-wrapper">
                                 <div className="input">
@@ -96,22 +117,22 @@ const [activeTab,setActiveTab] = useState('Password');
                                     // value={password}
                                     // onChange={(e) => setPassword(e.target.value)}
                                   />
-                                   <div className="fs-6">
+                                   <div className="fs-6 pt-2">
                                    Must be at least 8 characters.
                                   </div>
                                 </div>
                               </div>
                               <div className="logins__actions ">
                                 <input
-                                  type="submit"
+                                  type="button"
                                   value="Sign up"
                                   data-wait="Please wait..."
                                   className="logins__btn-primary w-button"
-                                  // onClick={handleLogin}
+                                  onClick={handleSignup}
                                 />
                               </div>
-                              <Button className='text-dark fs-5 ' 
-                              style={{background:'transparent',padding:'12px',width:'120%',fontWeight:'600',border:' 1px solid gray',borderRadius:'15px'}}>
+                              <Button className='text-dark fs-6' 
+                              style={{background:'transparent',padding:'12px',fontWeight:'600',border:' 1px solid gray',borderRadius:'15px'}}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8%" height="8%" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
                                   <path d="M22.5005 12.2332C22.5005 11.3699 22.4291 10.7399 22.2744 10.0865H12.2148V13.9832H18.1196C18.0006 14.9515 17.3577 16.4099 15.9291 17.3898L15.9091 17.5203L19.0897 19.935L19.3101 19.9565C21.3338 18.1249 22.5005 15.4298 22.5005 12.2332" fill="#4285F4"></path>
                                   <path d="M12.214 22.5C15.1068 22.5 17.5353 21.5666 19.3092 19.9566L15.9282 17.3898C15.0235 18.0082 13.8092 18.4399 12.214 18.4399C9.38069 18.4399 6.97596 16.6082 6.11874 14.0765L5.99309 14.087L2.68583 16.5954L2.64258 16.7132C4.40446 20.1432 8.0235 22.5 12.214 22.5Z" fill="#34A853"></path>
@@ -127,23 +148,21 @@ const [activeTab,setActiveTab] = useState('Password');
                     </div>
                     {/* {loginError && <div className="logins__error">{loginError}</div>} */}
                     <div className="logins__after-form">
-                      <div className='fs-5'>Already have an account?  <Link  style={{color:'#6042EC'}} to="/login" className="fs-5 logins__text-link text-decoration-none">
-                        Log in
+                      <div className='fs-6'>Already have an account? <Link  style={{color:'#6042EC'}} to="/login" className="fs-6 logins__text-link text-decoration-none">Login
                       </Link> </div>
                     </div>
                   </div>
              </div>
              <div className='d-flex mt-5 justify-content-between align-items-center'>
-              <div className='fs-5'> © Sintra AI</div>
-              <div className='fs-5'> Get Help</div>
+              <div className='fs-6'> © Nyxil Studio AI</div>
+              <div className='fs-6'> Get Help</div>
 
              </div>
-            </div>
             </Col>
 
-            <Col  className='w-100 px-5 pt-5 ' style={{background:'#F9FAFB'}}>
+            <Col  className='w-100 promptsHeaderContainer loginleftside pt-5 ' style={{background:'#F9FAFB'}}>
             <div>
-                <p className='fs-1' style={{paddingTop:'120px',fontWeight:'500'}}>"Sintra AI has revolutionized the way I tackle projects,
+                <p className='fs-2 pt-5' style={{fontWeight:'500',lineHeight:'1.2'}}>"Nyxil Studio AI has revolutionized the way I tackle projects,
                      boosting my productivity and sparking incredible creativity. It's an absolute game-changer!"</p>
             </div>
             <div className='d-flex justify-content-between'>

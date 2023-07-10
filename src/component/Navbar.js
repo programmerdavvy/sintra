@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { Nav,Navbar,Container } from 'react-bootstrap';
 import {Button} from 'reactstrap'
-import Logo from '../assets/images/logo.png';
+import Logo from '../assets/images/nyxil_logo.png';
 import { User,ChevronDown } from 'react-feather';
 import NavbarDropdown from './NavbarDropdown';
 import { Link } from 'react-router-dom';
@@ -30,44 +30,41 @@ const  Navbarmenu = () => {
 
   return (
     <div>
-    <Navbar expand="lg"  className="p-4" style={{borderBottom:'1px solid #eee'}}>
-      <Container fluid  className='p-3'>
+    <Navbar expand="lg"  className="p-3" style={{borderBottom:'1px solid #eee'}}>
+      <Container fluid  className=''>
         <Navbar.Brand href="/">
-            <img src={Logo} className='img-fluid' width='120' alt='logo'/>
+            <img src={Logo} className='img-fluid mx-3' width='90' alt='logo'/>
         </Navbar.Brand>
        
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto fs-5" style={{fontWeight:'600'}}>
-            <Nav.Link href="#home">Prompts  <span className='fs-6 mx-2' 
-                style={{
-                    background:'#ecfdf3',borderRadius:'10px',padding:'6px'
-                 }}
-            
-            >New</span>
+          <Nav className="me-auto fs-6 fw-600">
+            <Nav.Link href="/prompts">Prompts
+               <span className='mx-2 px-3' style={{background:'#ecfdf3',padding:'5px',fontSize:'12px',  borderRadius:'15px'}}>New</span>
+
             </Nav.Link>
            <Nav.Link href='#'  onMouseEnter={()=>handleOpenDropdown()} onClick={toggleDropdown}>
             Products <ChevronDown  id='chevronDown'/>
            </Nav.Link>
           </Nav>
           <Nav>
-            <div className='d-flex'>
+            <div className=''>
             <Link to='/login' className='text-decoration-none'>
-                <Button className='mt-4  fs-5 fw-600' 
-                      style={{padding:'12px',background:'white',fontWeight:'600',
-                      borderRadius:'15px',border:'none',width:'100px',color:'black'
+                <Button className=' fs-6 fw-600' 
+                      style={{background:'white',fontWeight:'600',
+                      borderRadius:'12px',border:'none',width:'100px',color:'black',padding:'12px',
                       
                       }}>
                         Log in
                 </Button> 
             </Link>
-                <Button className='mt-4 fs-5 fw-600 ' 
-                  style={{padding:'12px',background:'#6042EC',fontWeight:'600',
-                  borderRadius:'15px',border:'none',width:'100px'
+                <Link to='/signup'><Button className='fs-6 fw-600 ' 
+                  style={{background:'#6042EC',fontWeight:'600',
+                  borderRadius:'12px',border:'none',width:'100px',padding:'12px',
                   
                   }} >
                     Sign up
-                   </Button>
+                   </Button></Link>
             </div>
             <div className='bg-light d-none p-2 rounded-circle'>
                 <User size={25}/>

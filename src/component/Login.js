@@ -1,37 +1,74 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Row ,Col,Button} from 'react-bootstrap';
-import Logo from '../assets/images/logo.png';
+import Logo from '../assets/images/nyxil_logo.png';
 import LoginImg from '../assets/images/login-i.png';
 import { Link } from 'react-router-dom';
+import { request } from '../services/utilities';
+import axios from 'axios';
 
 function Login() {
 
 const [activeTab,setActiveTab] = useState('Email');
-
+const [email,setEmail] = useState('');
+const [password,setPassword] = useState('');
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
+  const handleLogin = async () => {
+    const url = `Loginv1`;
+    const data =  {
+      "Email" : "ebukaugwulast@gmail.com",
+      "Password" : "chris100"
+  }
+    console.log(data);
+    // fetch('https://backend.nyxil.studio/Api/fetch/loginv1',{
+    //  headers:{
+
+    //   "Content-Type": "application/json",
+    //  },
+    //  method:'POST',
+    //  body: JSON.stringify(data
+    // })
+    // .then(post => {
+    // console.log(post);
+    // });
+    const response = await (axios.post('https://backend.nyxil.studio/Api/fetch/loginv1',data));
+    console.log(response.data)
+  }
+  // useEffect(()=>{
+  //  const fetchCategory = () =>{
+  //   fetch('https://test.aprojects.com.ng/api/Fetch/GetCategory',{
+  //     method:'post',
+  //     body:JSON.stringify(data),
+  //   })
+  //   .then(data => {
+  //   return data.json();
+  //   })
+  //   .then(post => {
+  //   console.log(post);
+  //   });
+  //   } 
+  //   fetchCategory()
+  // })
   return (
     <>
         <Row className='w-100'>
-            <Col  className='w-100' style={{padding:'40px'}}>
-            <div className=''>
-            <div>
-            <Link to='/'> <img src={Logo} className='img-fluid' width='120' alt='logo'/></Link>
-
+            <Col  className='promptsHeaderContainer'>
+            <div className='mt-4'>
+            <Link to='/'> <img src={Logo} className='img-fluid' width='90' alt='logo'/></Link>
             </div>
-            <div className="logins__container p-5">
+            <div className="logins__container promptsHeaderContainer pt-5">
                   <div className="logins__content">
                     <div className="logins__content__header">
                       <h1 className="logins__title">Log in</h1>
-                      <p className="text-md fs-5 pt-2">
+                      <p className="text-md fs-6 pt-2">
                         Welcome back! Please enter your details.
                       </p>
                     </div>
                     <div className="logins__tabs w-tabs">
-                      <div className="logins__tabs-menu w-tab-menu" role="tablist" style={{width:'120%'}}>
+                      <div className="logins__tabs-menu w-tab-menu" role="tablist">
                         <Link
                           data-w-tab="Email"
                           className={`logins__tabs__tab-link w-inline-block w-tab-link ${
@@ -39,7 +76,7 @@ const [activeTab,setActiveTab] = useState('Email');
                           }`}
                           onClick={() => handleTabClick("Email")}
                         >
-                          <div className='fw-600'>Email</div>
+                          <div className='fw-600 text-light-emphasis'>Email</div>
                           <div className="tabs-settings__tab-span">Your Order</div>
                         </Link>
                         <Link
@@ -49,7 +86,7 @@ const [activeTab,setActiveTab] = useState('Email');
                           }`}
                           onClick={() => handleTabClick("Password")}
                         >
-                          <div className='fw-600'>Password</div>
+                          <div className='fw-600 text-light-emphasis'>Password</div>
                         </Link>
                       </div>
                       <div className="logins__tabs-content w-tab-content">
@@ -73,7 +110,7 @@ const [activeTab,setActiveTab] = useState('Email');
                             >
                               <div className="logins__inputs-wrapper">
                                 <div className="input">
-                                  <label htmlFor="email-2" className="input__label">
+                                  <label htmlFor="email-2" className="input__label text-light-emphasis">
                                     Email
                                   </label>
                                   <input
@@ -88,7 +125,7 @@ const [activeTab,setActiveTab] = useState('Email');
                                     // value={email}
                                     // onChange={(e) => setEmail(e.target.value)}
                                   />
-                                  <div className="input__hint fs-5">
+                                  <div className="input__hint fs-6 pt-2">
                                   Enter your purchase email to get the 6 digit code.
                                   </div>
                                 </div>
@@ -113,15 +150,9 @@ const [activeTab,setActiveTab] = useState('Email');
                         >
                           <div className="logins__form-module w-form">
                             <form
-                              id="password-form"
-                              name="wf-form-Login-Form"
-                              data-name="Login Form"
-                              redirect="/tasks"
-                              data-redirect="/tasks"
-                              method="get"
+                              // id="password-form"
+                              // name="wf-form-Login-Form"
                               className="logins__form"
-                              aria-label="Login Form"
-                              data-gtm-form-interact-id="1"
                             >
                               <div className="logins__inputs-wrapper">
                                 <div className="input">
@@ -137,8 +168,8 @@ const [activeTab,setActiveTab] = useState('Email');
                                     placeholder="Enter your email"
                                     id="email-2"
                                     required=""
-                                    // value={email}
-                                    // onChange={(e) => setEmail(e.target.value)}
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                   />
                                 </div>
                                 <div className="input">
@@ -154,24 +185,22 @@ const [activeTab,setActiveTab] = useState('Email');
                                     placeholder="Enter your password"
                                     id="Password-2"
                                     required=""
-                                    // value={password}
-                                    // onChange={(e) => setPassword(e.target.value)}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                   />
                                   
                                 </div>
                               </div>
                               <div className="logins__actions ">
-                                <input
-                                  type="submit"
-                                  value="Sign in"
-                                  data-wait="Please wait..."
+                                < button
+                                  type="button"
                                   className="logins__btn-primary w-button"
-                                  // onClick={handleLogin}
-                                />
+                                  onClick={()=>handleLogin()}
+                                >Sign in</button>
                               </div>
                               <div>
-                              <Button className='text-dark fs-5 '
-                   style={{background:'transparent',padding:'12px',width:'120%',fontWeight:'600',border:' 1px solid gray',borderRadius:'15px'}}>
+                              <Button className='text-dark fs-6'
+                   style={{background:'transparent',padding:'12px',fontWeight:'600',border:' 1px solid gray',borderRadius:'15px'}}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="8%" height="8%" viewBox="0 0 24 24" fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
                     <path d="M22.5005 12.2332C22.5005 11.3699 22.4291 10.7399 22.2744 10.0865H12.2148V13.9832H18.1196C18.0006 14.9515 17.3577 16.4099 15.9291 17.3898L15.9091 17.5203L19.0897 19.935L19.3101 19.9565C21.3338 18.1249 22.5005 15.4298 22.5005 12.2332" fill="#4285F4"></path>
                     <path d="M12.214 22.5C15.1068 22.5 17.5353 21.5666 19.3092 19.9566L15.9282 17.3898C15.0235 18.0082 13.8092 18.4399 12.214 18.4399C9.38069 18.4399 6.97596 16.6082 6.11874 14.0765L5.99309 14.087L2.68583 16.5954L2.64258 16.7132C4.40446 20.1432 8.0235 22.5 12.214 22.5Z" fill="#34A853"></path>
@@ -187,30 +216,29 @@ const [activeTab,setActiveTab] = useState('Email');
                     </div>
                     {/* {loginError && <div className="logins__error">{loginError}</div>} */}
                     <div className="logins__after-form">
-                      <div className='fs-5'>  Don't have an account?  <Link  style={{color:'#6042EC'}} to="/signup" className="fs-5 logins__text-link text-decoration-none">
+                      <div className='fs-6'>  Don't have an account?  <Link  style={{color:'#6042EC'}} to="/signup" className="fs-6 logins__text-link text-decoration-none">
                         Sign up
-                      </Link> </div>
-                     
-                          {activeTab !== 'Email' && <Link style={{color:'#6042EC'}}
-                                    to="/password/forgot"
-                                    className="logins__text-link text-decoration-none fs-5"
-                                  >
-                                    Forgot password?
-                                  </Link>}
+                      </Link> 
+                      </div>
+                          {activeTab !== 'Email' && 
+                          <Link style={{color:'#6042EC'}}
+                            to="/password/forgot"
+                            className="logins__text-link text-decoration-none fs-6"
+                             >
+                                Forgot password?
+                            </Link>}
                     </div>
                   </div>
              </div>
              <div className='d-flex mt-5 justify-content-between align-items-center'>
-              <div className='fs-5'> © Sintra AI</div>
-              <div className='fs-5'> Get Help</div>
-
+              <div className='fs-6'> © Nyxil Studio AI</div>
+              <div className='fs-6'> Get Help</div>
              </div>
-            </div>
             </Col>
 
-            <Col  className='w-100 px-5 pt-5 ' style={{background:'#F9FAFB'}}>
+            <Col  className='w-100 promptsHeaderContainer loginleftside pt-5 ' style={{background:'#F9FAFB'}}>
             <div>
-                <p className='fs-1' style={{paddingTop:'120px',fontWeight:'500'}}>"Sintra AI has revolutionized the way I tackle projects,
+                <p className='fs-2 pt-5' style={{fontWeight:'500',lineHeight:'1.2'}}>"Nyxil Studio AI has revolutionized the way I tackle projects,
                      boosting my productivity and sparking incredible creativity. It's an absolute game-changer!"</p>
             </div>
             <div className='d-flex justify-content-between'>

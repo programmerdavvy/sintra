@@ -8,6 +8,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PromptPack from "./pages/PromptPack";
 import AddOns from "./pages/AddOns";
 import Signup from "./component/Signup";
+import Prompts from "./pages/Prompts";
+import Prompt from "./pages/Prompt";
+import Bots from "./pages/Bots";
 
 function App() {
   return (
@@ -20,7 +23,10 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/testing" element={<TabsFilled />} />
       <Route path="/prompt-packs" element={<PromptPack />} />
+      <Route path="/bots" element={<Bots />} />
       <Route path="/add-ons" element={<AddOns />} />
+      <Route path="/prompts" element={<Prompts />} />
+      <Route path="/prompt/:title" element={<Prompt />} />
 
 
     </Routes>

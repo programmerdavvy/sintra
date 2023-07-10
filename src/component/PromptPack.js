@@ -6,30 +6,30 @@ import { Row,Col } from 'react-bootstrap'
 function PromptPack() {
   return (
     <>
-<div className='p-5'>
+<div className='promptsHeaderContainer'>
     <div className='breadcru d-flex align-items-center'>
-    <Home  size={30}/>
-    <ChevronRight  size={30} color='#eee'/>
-    <span className='fw-600 fs-4'>Sintra Prompt Packs</span>
+    <Home  size={25}/>
+    <ChevronRight className='mx-2'  size={20} color='#eee'/>
+    <span className=' fs-5'>Nyxil Studio Prompt Packs</span>
     </div>
 
-    <div className='pt-4'>
-        <p className='fw-600' style={{fontSize:'70px'}}>Sintra Prompt Packs</p>
-        <p className='fs-4 text-light-emphasis'>Proven & tested ready-made prompt packs for you to copy & paste into your work.</p>
+    <div className='pt-3'>
+        <p className='fw-600 promptsHeaderBigText'>Nyxil Studio Prompt Packs</p>
+        <p className='text-light-emphasis promptsHeadersmallText'>Proven & tested ready-made prompt packs for you to copy & paste into your work.</p>
     </div>
 </div>
-<div className='pt-5 pb-5 px-5' style={{background:'#F9FAFB'}}>
+    <div className='pt-5 pb-5 promptsPackCard' style={{background:'#F9FAFB'}}>
        <Row>
-        <Col><PackCard/></Col>
-        <Col><PackCard/></Col>
-        <Col><PackCard/></Col>
-        <Col><PackCard/></Col>
+       <Col xl={3} md={6} sm={12}><PackCard/></Col>
+        <Col xl={3} md={6} sm={12}><PackCard/></Col>
+        <Col xl={3} md={6}  sm={12}><PackCard/></Col>
+        <Col  xl={3} md={6} sm={12}><PackCard/></Col>
        </Row>
        <Row>
-        <Col><PackCard/></Col>
-        <Col><PackCard/></Col>
-        <Col><PackCard/></Col>
-        <Col><PackCard/></Col>
+       <Col xl={3} md={6} sm={12}><PackCard/></Col>
+        <Col xl={3} md={6} sm={12}><PackCard/></Col>
+        <Col xl={3} md={6}  sm={12}><PackCard/></Col>
+        <Col  xl={3} md={6} sm={12}><PackCard/></Col>
        </Row>
     </div>
     </>

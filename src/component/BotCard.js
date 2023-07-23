@@ -1,6 +1,6 @@
 import React from 'react'
 import {  CardBody, Button } from 'reactstrap'
-import BookImg from '../assets/images/bot.png'
+import BookImg from '../assets/images/productimage.png'
 import { Link } from 'react-router-dom'
 
 function BotsCard() {
@@ -26,7 +26,7 @@ function BotsCard() {
              <div>
                   <Button className='w-100  fs-6' 
                   style={{padding:'12px',background:'#6042EC',fontWeight:'600',borderRadius:'15px',border:'none'}} >
-                   Unlock with Nyxil Studio Max
+                    Comming Soon
                     </Button>
                 </div>
                 <div>

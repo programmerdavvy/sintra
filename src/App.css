@@ -142,7 +142,15 @@ body{
 .w--tab-active {
   display: block;
 }
-
+.active{
+  color: blue !important;
+}
+.textdarklink{
+  color: #450574;
+}
+.textdarklink:focus{
+  color: blue;
+}
 .logins__tabs-menu {
   grid-column-gap: 16px;
   grid-row-gap: 16px;
@@ -444,6 +452,9 @@ textarea.w-input, textarea.w-select {
 .col-sm-3-l{
   flex: 0 0 auto;
   width: 25%;
+}
+.btnNotitifcation button{
+  background-color: #fff;
 }
 .signupboardleft{
   margin-right: 1.5rem!important;

@@ -11,6 +11,9 @@ import Signup from "./component/Signup";
 import Prompts from "./pages/Prompts";
 import Prompt from "./pages/Prompt";
 import Bots from "./pages/Bots";
+import Account from "./pages/Account";
+import SavedPrompts from "./pages/SavedPrompts";
+
 
 function App() {
   return (
@@ -26,7 +29,9 @@ function App() {
       <Route path="/bots" element={<Bots />} />
       <Route path="/add-ons" element={<AddOns />} />
       <Route path="/prompts" element={<Prompts />} />
-      <Route path="/prompt/:title" element={<Prompt />} />
+      <Route path="/saved-prompts" element={<SavedPrompts />} />
+      <Route path="/prompt/:category/:title/:description" element={<Prompt />} />
+      <Route path="/account" element={<Account />} />
 
 
     </Routes>

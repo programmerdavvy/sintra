@@ -23,7 +23,7 @@ function PackCard() {
              <div>
                   <Button className='w-100  fs-6' 
                   style={{padding:'12px',background:'#6042EC',fontWeight:'600',borderRadius:'15px',border:'none'}} >
-                    Unlock with Nyxil Studio Plus
+                    Comming Soon
                     </Button>
                 </div>
                 <div>

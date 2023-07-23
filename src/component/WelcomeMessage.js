@@ -10,10 +10,10 @@ function WelcomeMessage() {
         <button style={{borderRadius:'12px', background:'#f2f4f7',color:'#6042EC',fontSize:'14px',fontWeight:'600'}}  className='btn updateBadge'>Update</button>
     </div>
     <div>
-        <h1 className='promptsHeaderBigText' style={{fontWeight:700}}>Welcome to new Nyxil Studio Hub</h1>
+        <h1 className='promptsHeaderBigText' style={{fontWeight:700}}>Welcome to new Nyxil Studio</h1>
     </div>
     <div>
-        <p className='promptsHeadersmallText text-light-emphasis pt-2'>We're happy to announce that we're transitioning from <br/>Nyxil Studio Hub to all-in-one platform Nyxil Studio AI.</p>
+        <p className='promptsHeadersmallText text-light-emphasis pt-2'>Introducing the most advanced ChatGPT toolkit  web-studio <br/> in existence,  containing over 13,000 prompts and 2,400+ <br/> tasks  for simple automation.</p>
     </div>
     <div className='groupbtnwelcome d-flex justify-content-center align-items-center'>
         <div className='mb-4'><Link to="/login"  className=' fs-6 btn text-white' style={{borderRadius:'12px', padding:'12px',fontWeight:'600',background:'#4943c4'}}>Log In
@@ -25,8 +25,7 @@ function WelcomeMessage() {
         Sign up</Link></div>
     </div>
     <p className='opacity-50 fs-6'>
-    Your account, purchased accesses, details and <br/> passwords stays the same. If you have
-     <br/> question, reach out to our <Link to="#" className='text-decoration-none' style={{color:'darkblue'}}> Support</Link> team.
+ If you have question, reach out to our <Link to="#" className='text-decoration-none' style={{color:'darkblue'}}> Support</Link> team.
     </p>
   </div>
     </div>

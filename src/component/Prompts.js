@@ -2,17 +2,39 @@ import React, { useEffect, useState } from 'react'
 import { Row,Col, Form,DropdownButton,Dropdown } from 'react-bootstrap';
 import {  ArrowDown, ArrowUp, ChevronRight, Home, Search ,X} from 'react-feather'
 import { Link } from 'react-router-dom';
-import { Button, Input, Modal, ModalBody, ModalHeader } from 'reactstrap';
+import { Button, Input, Modal, ModalBody, ModalHeader ,Spinner} from 'reactstrap';
 import PromptCard from './PromptCard';
 import {request} from '../services/utilities';
-
+import SSRStorage from '../services/storage';
+import { USER_COOKIE } from '../services/constants';
+import TasksOverlay from './TasksOverlay';
+const storage = new SSRStorage();
 
 function Prompts() {
+    const [sortText,setSortText] = useState('Popularity');
+    const [sortTexts,setSortTexts] = useState('Saves');
+
     const [packs] = useState([]);
     const [count,setCount] = useState(0);
+    const [savedPromptCount,setSavedPromptCount] = useState('0');
     const [showmodal,setShowmodal] = useState(false);
    const [categories,setCategories]= useState([]);
+   const [prompts,setPrompts]= useState([]);
+   const [filteredPrompts,setFilteredPrompts] = useState([]);
+    const [loading,setLoading] = useState(false);
 
+    
+    const fetchSavedCount = async () =>{
+        const user = await storage.getItem(USER_COOKIE);
+        const url = `countPrompt?accesskey=${user? user[0].accesskey : ''}`;
+        try{
+            const rs = await request(url,'GET',false);
+            setSavedPromptCount(rs);
+        }catch(err){
+            setSavedPromptCount(err.message.Message);
+            console.log(err); 
+        }
+       }
    const fetchCategories = async () =>{
     const url = `GetCategory`;
     try{
@@ -22,24 +44,44 @@ function Prompts() {
         console.log(err); 
     }
    }
+   const fetchAllPrompts = async (filteredArray) =>{
+    const url = `alltopics`;
+    try{
+        if(filteredArray?.length >= 1 ){
+            setPrompts(filteredArray);
+        }else{
+            setLoading(true)
+            const rs = await request(url,'GET',false);
+            setPrompts(rs);
+            setLoading(false)
+        }
+    }catch(err){
+        setLoading(false)
+        console.log(err); 
+    }
+   }
+   const handleRemovePack = (e,c) =>{
+    let checkbox = document.getElementById(c);    
+    let itemIndex = packs.indexOf(e);
+    packs.splice(itemIndex,1); 
+    let l = checkbox.checked === false;
+    setCount(count-1);
+   }
     const handleAddPack = (e,c) =>{
         let checkbox = document.getElementById(c);
-        let item = packs.find(a => a?.id === e.id);
-        console.log(checkbox,checkbox.checked,item)
- 
+        let item = packs.find(a => a === e);
         if(checkbox.checked === true){ 
             if(!item){ 
                 packs.push(e);  
                 setCount(count+1);
             }    
         }
-        if(checkbox.checked === false && item){
-                packs.splice(item,1);    
-                setCount(count-1);
-
-            
+        if(checkbox.checked === false){
+        let itemIndex = packs.indexOf(e);
+            packs.splice(itemIndex,1); 
+            let x = checkbox.checked === false;
+            setCount(count-1);
         }
-        
     }
     const sidebarMenu = [
         {
@@ -91,7 +133,7 @@ function Prompts() {
             id:1
         },
     ]
-    const prompts = [
+    const praompts = [
         {
             title:'Becoming an expert in Chatgpt',
             category:'Business',
@@ -142,13 +184,44 @@ function Prompts() {
         id:6
     },
     ]
+const searchPrompts = (e) =>{
+    let search = e;
+    let filteredArray = [];
 
+    for (let i = 0; i < prompts.length; i++) {
+        if (prompts[i].topic.toLowerCase().includes(search) || prompts[i].topic.toUpperCase().includes(search)){
+          filteredArray.push(prompts[i]);
+        }
+    }
+    if (search === "") filteredArray = [];
+
+    fetchAllPrompts(filteredArray)
+}
+const handleSavePrompts = async(title,category)=>{
+    const user = await storage.getItem(USER_COOKIE);
+    try{
+        const data={
+            accesskey:user? user[0].accesskey : '',
+            prompt:title,
+            category
+        }
+        const url = `PromptSaved`;
+        const rs = await request(url,'POST',false,data);
+        fetchSavedCount();
+    }catch(err){
+        console.log(err);
+    }
+}
     useEffect(()=>{
+        fetchSavedCount();
         fetchCategories();
+        fetchAllPrompts();
     },[]);
 
   return (
     <>
+    {loading &&<Spinner color='primary' style={{position:'absolute',top:'50%',left:'48%'}}/>}
+
     <div className='promptsHeaderContainer'>
         <div className='breadcru d-flex align-items-center'>
         <Home  size={25}/>
@@ -158,7 +231,7 @@ function Prompts() {
 
         <div className='pt-3'>
             <p className='fw-600 promptsHeaderBigText'>All Prompts</p>
-            <p className='text-light-emphasis promptsHeadersmallText'>Explore All Community & Nyxil Studio AI posted AI Prompts.</p>
+            <p className='text-light-emphasis promptsHeadersmallText'>Explore all the prompt packs, in one place.</p>
         </div>
     </div>
     <div style={{background:'#F9FAFB'}}>
@@ -179,22 +252,33 @@ function Prompts() {
     
          </Form>           
      </div>
-        <div className='pt-2 d-none pb-2 px-3 text-center mt-4 fw-600 fs-6 '
+     {savedPromptCount !== '0' && (
+        <Link to="/saved-prompts" className="text-decoration-none text-light-emphasis">
+ <div className='pt-2  pb-2 px-3 text-center mt-4 fw-600 fs-6 '
             style={{border:'1px solid #d0d5dd',backgroundColor:'#fff',borderRadius:'10px'}}> 
-            Saved Prompts  <span style={{background:'#f2f4f7',padding:'12px',}} className='rounded-circle mx-3 p-1 '> 0</span>
+            Saved Prompts  <span style={{background:'#f2f4f7',padding:'12px',}} className='rounded-circle mx-3 p-1 '> {savedPromptCount}</span>
         </div>
+        </Link>
+        )}
+       
         <hr />
         <div className='pt-2'>
             <h5>Categories</h5>
         </div>
         <div>
         <div>
-            <Link to='#' style={{color:'#5D57D9'}} className='text-decoration-none fw-600 fs-6'>All</Link>
+            <Link to='#' onClick={()=>{
+                    setFilteredPrompts([]);
+            }}  className='textdarklink text-decoration-none fw-600 fs-6'>All</Link>
         </div>
         {categories.map((e)=>{
             return(
                 <div className='mt-2' key={e.category}>
-                    <Link to='#' style={{color:'#667180'}} className='text-light-emphasis  text-decoration-none fw-600 fs-6'>{e.category}</Link>
+                    <Link id={`#${e.category}`} to={`#${e.category}`} onClick={()=>{
+                        let filteredPrompts = prompts.filter(x=>x.category === e.category);
+                        setFilteredPrompts(filteredPrompts);
+                        
+                    }}  className='textdarklink text-decoration-none fw-600 fs-6'>{e.category}</Link>
                 </div>
             )
         })}
@@ -203,12 +287,11 @@ function Prompts() {
                 <h5>Nyxil Studio Packs</h5>
             </div>
            <div>
-            
             {categories.map(e=>{
                 return(
                     <div className='px-3 pb-2' key={e.category}>
-                    <Input type='checkbox' style={{borderRadius:'0.375rem'}} onClick={()=>handleAddPack(e,`checkbox-${e.category}`)} name={e.category} id={`checkbox-${e.category}`} className='sidebar-checkbox-icon'/>
-                     <Link to='/#' className='text-light-emphasis text-decoration-none fw-600 fs-6'>{e.category} Packs 🏌️</Link>
+                    <Input type='checkbox' style={{borderRadius:'0.375rem'}} onClick={()=>handleAddPack(e.category,`checkbox-${e.category}`)} name={e.category} id={`checkbox-${e.category}`} className='sidebar-checkbox-icon'/>
+                     <Link to={`#${e.category}`}  className='text-light-emphasis text-decoration-none fw-600 fs-6'>{e.category} Packs 🏌️</Link>
                 </div>
                 )
             })}
@@ -220,12 +303,13 @@ function Prompts() {
            <div className='searchHeader'>
             <div className='search-header'>
                 <Row className='w-100 align-items-center'>
+                    {/* <p>&#x1F4CB;</p> */}
                     <Col xl={7} md={12} sm={12}>
                         <div>
                             <div className='input pb-2 d-flex'>
                                 <div className='searchIcon' style={{background:'#fff'}}><Search  size={20}/></div>
                                 <input name='search' className='input'
-                                    style={{borderLeft:'none'}}
+                                    style={{borderLeft:'none'}} onChange={e=>searchPrompts(e.target.value)}
                                 maxLength='256' placeholder='Search for Prompt' id='input search-bar'/>
                             </div>
                             
@@ -233,62 +317,80 @@ function Prompts() {
                     </Col>
                     <Col xl={4} md={6} xs={6} className='' id='searchwfsm'> 
                         <div>
-                        <div style={{fontSize:'14px'}} className='loginleftside text-light-emphasis'>Showing 0 of 2434 Prompts</div>
+                            
+                        <div style={{fontSize:'13px'}} className='loginleftside text-light-emphasis'>Showing 0 of {filteredPrompts.length > 1? filteredPrompts.length : prompts.length }  <TasksOverlay/></div>
                          </div>
                     </Col>
                     <Col xl={1} md={6} xs={12}>
                         <div className='large-screen proptslength'>
-                            <DropdownButton variant='white' className='fw-600' id="dropdown-basic-button" title="Sort by: Upvotes">
-                            <Dropdown.Item href="#/action-1">Upworks</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2">Name (A - Z)</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3">Name (Z - A)</Dropdown.Item>
+                            <DropdownButton variant='white' style={{position:"unset"}} className='fw-600' id="dropdown-basic-button" title={`Sort by: ${sortText}`}>
+                            <Dropdown.Item  onClick={()=>{
+                                setSortText('Popularity');
+                                fetchAllPrompts();
+                            }}>Popularity</Dropdown.Item>
+                            <Dropdown.Item  onClick={()=>{
+                                setSortText('Name (A - Z)');
+                                let data = prompts.sort((a, b) => a.topic.localeCompare(b.topic));
+                                setPrompts(data);
+                            }}>Name (A - Z)</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{
+                                setSortText('Name (Z - A)');
+                                let data = prompts.sort((a, b) => b.topic.localeCompare(a.topic))
+                                setPrompts(data);
+                            }}>Name (Z - A)</Dropdown.Item>
                             </DropdownButton>
                         </div>
                         
                         <div className='small-screen'> 
                         <div className='d-flex'>
-                        <button onClick={()=>setShowmodal(true)} className='mx-3 btn fs-6 bg-white' style={{fontWeight:'500',border:'1px solid #eee',width:'100%', borderRadius:'10px'}} > 
+                        <button onClick={()=>setShowmodal(true)} className='mx-3 btn  bg-white' style={{fontWeight:'500',fontSize:'12px',border:'1px solid #eee',width:'100%', borderRadius:'10px'}} > 
                         <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="100%" viewBox="0 0 20 20" fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
                         <path d="M5 10H15M2.5 5H17.5M7.5 15H12.5" stroke="currentColor" strokeWidth="1.66667" strokeLinecap="round" stroke-linejoin="round"></path>
                         </svg>  Filters 
                         </button>
-                        <Dropdown style={{width:'100%'}}>
-                        <Dropdown.Toggle  DropdownButton variant='white' style={{border:'1px solid #eee',width:'100%',fontWeight:'500',borderRadius:'10px'}} 
-                            className='bg-white fs-6' id="dropdown-basic">
-                                    <ArrowUp size={18} /><ArrowDown size={18} />Saves
+                        <Dropdown style={{width:'100%',position:"unset"}}>
+                        <Dropdown.Toggle  DropdownButton variant='white'
+                         style={{border:'1px solid #eee',fontSize:'12px', width:'100%',fontWeight:'500',borderRadius:'10px'}} 
+                            className='bg-white' id="dropdown-basic2">
+                             <ArrowUp size={18} /><ArrowDown size={18} />{sortTexts}
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            <Dropdown.Item href="#/action-1">Saves</Dropdown.Item>
-                            <Dropdown.Item href="#/action-2">Name (A - Z)</Dropdown.Item>
-                            <Dropdown.Item href="#/action-3">Name (Z - A)</Dropdown.Item>
+                        <Dropdown.Item  onClick={()=>{
+                                setSortTexts('Saves');
+                                fetchAllPrompts();
+                            }}>Popularity</Dropdown.Item>
+                            <Dropdown.Item  onClick={()=>{
+                                setSortTexts('Name (A - Z)');
+                                let data = prompts.sort((a, b) => a.topic.localeCompare(b.topic));
+                                setPrompts(data);
+                            }}>Name (A - Z)</Dropdown.Item>
+                            <Dropdown.Item onClick={()=>{
+                                setSortTexts('Name (Z - A)');
+                                let data = prompts.sort((a, b) => b.topic.localeCompare(a.topic));
+                                setPrompts(data);
+                            }}>Name (Z - A)</Dropdown.Item>
                         </Dropdown.Menu>
                         </Dropdown>
                         </div>
                         </div>
                     </Col>
                 </Row>
-                <div className='d-flex d-none'>
+                 <div className='d-flex'>
                     {packs?.map((e,i)=>{
                         return(
-                            <div className='p-2 mt-2 mx-1 bg-white px-3 fw-600' key={i}
-                            style={{border:'1px solid #d0d5dd',cursor:'pointer', width:'20%',borderRadius:'10px',
-                             fontSize:'14px', boxShadow:'0 1px 2px rgba(16,24,40,.05)'}}
+                            <div className='p-2 mt-2 mx-1 bg-white px-3 fw-600 proptslength' key={i}
+                            style={{border:'1px solid #d0d5dd',cursor:'pointer',borderRadius:'10px',
+                             fontSize:'13px', boxShadow:'0 1px 2px rgba(16,24,40,.05)'}}
                             > 
-                              {e.category}🏌️ <X size={20} color='#667180'/>
+                              {e} Pack🏌️ <X size={20} onClick={()=> handleRemovePack(e,`checkbox-${e}`)} color='#667180'/>
                            </div>
                         )
                     })}
-                   
-                    <div className='p-2 mt-2 mx-2 bg-white px-3 fw-600'
-                     style={{border:'1px solid #d0d5dd',width:'20%',borderRadius:'10px', fontSize:'14px', boxShadow:'0 1px 2px rgba(16,24,40,.05)'}}
-                     > 
-                        Agency Pack 🏌️ <X size={20} color='#667180'/>
-                    </div>
                 </div>
             </div>
                 <Row className=''>
-                    <PromptCard prompts={prompts}/>
+                    <PromptCard handleSavePrompts={handleSavePrompts} prompts={filteredPrompts.length > 1 ? filteredPrompts: prompts}/>
                 </Row>
             </div> 
         </div>
@@ -311,12 +413,18 @@ function Prompts() {
         </div>
         <div>
         <div>
-            <Link to='#' style={{color:'#5D57D9'}} className='text-decoration-none fw-600 fs-6'>All</Link>
+            <Link to='#' onClick={()=>{
+                    setFilteredPrompts([]);
+            }}  className='textdarklink text-decoration-none fw-600 fs-6'>All</Link>
         </div>
         {categories.map((e)=>{
             return(
                 <div className='mt-2' key={e.category}>
-                    <Link to='#' style={{color:'#667180'}} className='text-light-emphasis  text-decoration-none fw-600 fs-6'>{e.category}</Link>
+                    <Link id={`#${e.category}`} to={`#${e.category}`} onClick={()=>{
+                        let filteredPrompts = prompts.filter(x=>x.category === e.category);
+                        setFilteredPrompts(filteredPrompts);
+                        
+                    }}  className='textdarklink text-decoration-none fw-600 fs-6'>{e.category}</Link>
                 </div>
             )
         })}
@@ -324,13 +432,12 @@ function Prompts() {
             <div className='pt-2 pb-3'>
                 <h5>Nyxil Studio Packs</h5>
             </div>
-           <div>
-            
+            <div>
             {categories.map(e=>{
                 return(
                     <div className='px-3 pb-2' key={e.category}>
-                    <Input type='checkbox' style={{borderRadius:'0.375rem'}} onClick={()=>handleAddPack(e,`checkbox-${e.category}`)} name={e.category} id={`checkbox-${e.category}`} className='sidebar-checkbox-icon'/>
-                     <Link to='/#' className='text-light-emphasis text-decoration-none fw-600 fs-6'>{e.category} Packs 🏌️</Link>
+                    <Input type='checkbox' style={{borderRadius:'0.375rem'}} onClick={()=>handleAddPack(e.category,`checkbox-${e.category}`)} name={e.category} id={`checkbox-${e.category}`} className='sidebar-checkbox-icon'/>
+                     <Link to={`#${e.category}`}  className='text-light-emphasis text-decoration-none fw-600 fs-6'>{e.category} Packs 🏌️</Link>
                 </div>
                 )
             })}

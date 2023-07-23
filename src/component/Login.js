@@ -1,59 +1,91 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Row ,Col,Button} from 'react-bootstrap';
-import Logo from '../assets/images/nyxil_logo.png';
-import LoginImg from '../assets/images/login-i.png';
+import Logo from '../assets/images/logoblue.jpeg';
+import LoginImg from '../assets/images/logo2.jpeg';
 import { Link } from 'react-router-dom';
 import { request } from '../services/utilities';
-import axios from 'axios';
+import SSRStorage from '../services/storage';
+import { USER_COOKIE } from '../services/constants';
+import { Spinner } from 'reactstrap';
+import Notification from './Notification';
+const storage = new SSRStorage();
+
 
 function Login() {
 
 const [activeTab,setActiveTab] = useState('Email');
 const [email,setEmail] = useState('');
 const [password,setPassword] = useState('');
-
-  const handleTabClick = (tab) => {
+const [code,setCode]= useState('');
+const [loading,setLoading] = useState(false);
+const [showCodeInput,setShowCodeInput] = useState(false);
+const navigate = useNavigate() ;
+const [showA, setShowA] = useState(false);
+const [message,setmessage] = useState('')
+const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+  const hideA = () => setShowA(false)
 
-  const handleLogin = async () => {
-    const url = `Loginv1`;
-    const data =  {
-      "Email" : "ebukaugwulast@gmail.com",
-      "Password" : "chris100"
-  }
-    console.log(data);
-    // fetch('https://backend.nyxil.studio/Api/fetch/loginv1',{
-    //  headers:{
+  
+  const handleLoginWithPssword = async () => {
+    setLoading(true);
+    const url = `loginv1`;
+    const data={email,password}
+  try{
+    const rs = await request(url,'POST',false,data);
+    console.log(rs);
+    storage.setItem(USER_COOKIE, rs);
+    navigate('/prompts'); 
+    setLoading(false);
 
-    //   "Content-Type": "application/json",
-    //  },
-    //  method:'POST',
-    //  body: JSON.stringify(data
-    // })
-    // .then(post => {
-    // console.log(post);
-    // });
-    const response = await (axios.post('https://backend.nyxil.studio/Api/fetch/loginv1',data));
-    console.log(response.data)
+  }catch(err){
+    console.log(err);
+    setLoading(false);
   }
-  // useEffect(()=>{
-  //  const fetchCategory = () =>{
-  //   fetch('https://test.aprojects.com.ng/api/Fetch/GetCategory',{
-  //     method:'post',
-  //     body:JSON.stringify(data),
-  //   })
-  //   .then(data => {
-  //   return data.json();
-  //   })
-  //   .then(post => {
-  //   console.log(post);
-  //   });
-  //   } 
-  //   fetchCategory()
-  // })
+  }
+  const handleLoginWithCode = async () => {
+    setLoading(true);
+    const url = `loginv2`;
+    const data={email,otp:parseInt(code)}
+  try{
+    const rs = await request(url,'POST',false,data);
+    console.log(rs);
+    storage.setItem(USER_COOKIE, rs);
+    navigate('/prompts'); 
+    setLoading(false);
+
+  }catch(err){
+    console.log(err);
+    setLoading(false);
+  }
+  }
+  const getLoginCode = async () => {
+    setLoading(true);
+    const url = `GetCode`;
+    const data={email}
+  try{
+    const rs = await request(url,'POST',false,data);
+    setmessage('mail sent')
+    setShowA(true);
+    setTimeout(hideA, 5000);    
+    setShowCodeInput(true);
+    setLoading(false);
+
+  }catch(err){
+    setmessage('User not found');
+    setShowA(true);
+    setTimeout(hideA, 5000); 
+    console.log(err);
+    setLoading(false);
+  }
+  }
   return (
     <>
+    {loading &&<Spinner color='primary' style={{position:'absolute',top:'40%',left:'48%'}}/>}
+    <div className='loginleftside' style={{position:'absolute',top:'80%', left:'40%'}}> {showA && <Notification  message={message} />}</div>
+    
         <Row className='w-100'>
             <Col  className='promptsHeaderContainer'>
             <div className='mt-4'>
@@ -65,7 +97,10 @@ const [password,setPassword] = useState('');
                       <h1 className="logins__title">Log in</h1>
                       <p className="text-md fs-6 pt-2">
                         Welcome back! Please enter your details.
+                        
                       </p>
+                      <div className='small-screen'>{showA &&<Notification message={message} />}</div>
+                      
                     </div>
                     <div className="logins__tabs w-tabs">
                       <div className="logins__tabs-menu w-tab-menu" role="tablist">
@@ -98,15 +133,9 @@ const [password,setPassword] = useState('');
                         >
                           <div className="logins__form-module w-form">
                             <form
-                              id="email-form"
-                              name="wf-form-Login-Form"
-                              data-name="Login Form"
-                              redirect="/tasks"
-                              data-redirect="/tasks"
-                              method="get"
+                              id="email-form"                              
                               className="logins__form"
-                              aria-label="Login Form"
-                              data-gtm-form-interact-id="0"
+                              
                             >
                               <div className="logins__inputs-wrapper">
                                 <div className="input">
@@ -122,22 +151,52 @@ const [password,setPassword] = useState('');
                                     placeholder="Enter your email"
                                     id="email-2"
                                     required=""
-                                    // value={email}
-                                    // onChange={(e) => setEmail(e.target.value)}
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                   />
                                   <div className="input__hint fs-6 pt-2">
                                   Enter your purchase email to get the 6 digit code.
                                   </div>
                                 </div>
+                                {showCodeInput &&(
+                                  <div className="input">
+                                  <label htmlFor="email-2" className="input__label text-light-emphasis">
+                                    6 digit code
+                                  </label>
+                                  <input
+                                    type="text"
+                                    className="input__text-field w-input"
+                                    maxLength="256"
+                                    name="code-2"
+                                    data-name="Email 2"
+                                    placeholder="000000"
+                                    id="code-2"
+                                    required=""
+                                    value={code}
+                                    onChange={(e) => setCode(e.target.value)}
+                                  />
+                                  <div className="input__hint fs-6 pt-2">
+                                  Enter the 6-digit login code we just sent to your inbox.                                  </div>
+                                </div>
+                                )}
                               </div>
                               <div className="logins__actions">
-                                <input
-                                  type="submit"
-                                  value="Get 6 digit Code"
-                                  data-wait="Please wait..."
-                                  className="logins__btn-primary w-button"
-                                  // onClick={handleLogin}
-                                />
+                               {showCodeInput === false?
+                               <input
+                               type="button"
+                               value="Get 6 digit Code"
+                               data-wait="Please wait..."
+                               className="logins__btn-primary w-button"
+                               onClick={getLoginCode}
+                             />:
+                             <input
+                             type="button"
+                             value="Confirm & Login"
+                             data-wait="Please wait..."
+                             className="logins__btn-primary w-button"
+                             onClick={handleLoginWithCode}
+                           /> 
+                              }
                               </div>
                             </form>
                           </div>
@@ -195,7 +254,7 @@ const [password,setPassword] = useState('');
                                 < button
                                   type="button"
                                   className="logins__btn-primary w-button"
-                                  onClick={()=>handleLogin()}
+                                  onClick={()=>handleLoginWithPssword()}
                                 >Sign in</button>
                               </div>
                               <div>
@@ -231,14 +290,14 @@ const [password,setPassword] = useState('');
                   </div>
              </div>
              <div className='d-flex mt-5 justify-content-between align-items-center'>
-              <div className='fs-6'> © Nyxil Studio AI</div>
+              <div className='fs-6'> © Nyxil Studio</div>
               <div className='fs-6'> Get Help</div>
              </div>
             </Col>
 
             <Col  className='w-100 promptsHeaderContainer loginleftside pt-5 ' style={{background:'#F9FAFB'}}>
             <div>
-                <p className='fs-2 pt-5' style={{fontWeight:'500',lineHeight:'1.2'}}>"Nyxil Studio AI has revolutionized the way I tackle projects,
+                <p className='fs-2 pt-5' style={{fontWeight:'500',lineHeight:'1.2'}}>"Nyxil Studio  has revolutionized the way I tackle projects,
                      boosting my productivity and sparking incredible creativity. It's an absolute game-changer!"</p>
             </div>
             <div className='d-flex justify-content-between'>
@@ -314,7 +373,7 @@ const [password,setPassword] = useState('');
               </div>
             </div>
             <div className='' style={{marginTop:'100px'}}>
-                <img src={LoginImg} height='170px' width='100%' alt="loginImg"/>
+                <img src={LoginImg} className='img-fluid' height='200px' width='100%' alt="loginImg"/>
               </div>
             </Col>
         </Row>

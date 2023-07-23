@@ -1,54 +1,40 @@
 import { Row ,Col,Button} from 'react-bootstrap';
-import Logo from '../assets/images/nyxil_logo.png';
-import LoginImg from '../assets/images/login-i.png';
-import LinImg from '../assets/images/lin.png';
-
+import Logo from '../assets/images/logoblue.jpeg';
+import LoginImg from '../assets/images/logo2.jpeg';
+import LinImg from '../assets/images/nyxil_logox.png';
+import { Spinner } from 'reactstrap';
+import { request } from '../services/utilities';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'react-feather';
-import axios from 'axios'
+
 
 function Signup() {
-
-  const handleSignup = async () => {
-    const data =  {
-      "FullName" : "Chris",
-      "Email" : "ebukaugwulast@gmail.com",
-      "Password" : "chris100"
-  } 
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    const requestOptions = {
-      method: 'GET',
-      headers: headers,
-    };
-
-    fetch('https://backend.nyxil.studio/api/fetch/Register', requestOptions)
-      .then(response => response.json())
-      .then(data => {
-        // Display the API response data on the front end
-       console.log(JSON.stringify(data));
-      })
-      .catch(error => {
-        // Handle any errors that occur during the API request
-        console.error(error);
-      });
-  }  
-    // const response = await (axios.post('https://test.aprojects.com.ng/api/fetch/Register',data));
-    // console.log(response.data)
+  const [email,setEmail] = useState('');
+  const [password,setPassword] = useState('');
+  const [loading,setLoading] = useState(false);
+    const navigate = useNavigate() ;
   
-   // fetch('https://backend.nyxil.studio/Api/fetch/loginv1',{
-    //  headers:{
-    //   "Content-Type": "application/json",
-    //  },
-    //  method:'POST',
-    //  body: JSON.stringify(data
-    // })
-    // .then(post => {
-    // console.log(post);
-    // });
+    const handleSignup = async () => {
+    setLoading(true);
+    const url = `register`;
+    const data={email,password}
+  try{
+    const rs = await request(url,'POST',false,data);
+    console.log(rs);
+    navigate('/login'); 
+    setLoading(false);
+
+  }catch(err){
+    console.log(err);
+    setLoading(false);
+  }
+  } 
   return (
     <>
+    {loading &&<Spinner color='primary' style={{position:'absolute',top:'50%',left:'48%'}}/>}
+
         <Row className='w-100'>
             <Col  className='w-100 promptsHeaderContainer'> 
             <div className='mt-4'>
@@ -59,7 +45,7 @@ function Signup() {
                     <div className="logins__content__header">
                       <h1 className="logins__title">Sign up</h1>
                       <p className="text-md fs-6 pt-2">
-                      Create your Nyxil Studio AI account.
+                      Create your Nyxil Studio  account.
                       </p>
                     </div>
                     <div className='signupboard p-4 d-flex flex-direction-row' 
@@ -97,8 +83,8 @@ function Signup() {
                                     placeholder="Enter your email"
                                     id="email-2"
                                     required=""
-                                    // value={email}
-                                    // onChange={(e) => setEmail(e.target.value)}
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                   />
                                 </div>
                                 <div className="input">
@@ -114,8 +100,8 @@ function Signup() {
                                     placeholder="Enter your password"
                                     id="Password-2"
                                     required=""
-                                    // value={password}
-                                    // onChange={(e) => setPassword(e.target.value)}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                   />
                                    <div className="fs-6 pt-2">
                                    Must be at least 8 characters.
@@ -154,7 +140,7 @@ function Signup() {
                   </div>
              </div>
              <div className='d-flex mt-5 justify-content-between align-items-center'>
-              <div className='fs-6'> © Nyxil Studio AI</div>
+              <div className='fs-6'> © Nyxil Studio</div>
               <div className='fs-6'> Get Help</div>
 
              </div>
@@ -162,7 +148,7 @@ function Signup() {
 
             <Col  className='w-100 promptsHeaderContainer loginleftside pt-5 ' style={{background:'#F9FAFB'}}>
             <div>
-                <p className='fs-2 pt-5' style={{fontWeight:'500',lineHeight:'1.2'}}>"Nyxil Studio AI has revolutionized the way I tackle projects,
+                <p className='fs-2 pt-5' style={{fontWeight:'500',lineHeight:'1.2'}}>"Nyxil Studio  has revolutionized the way I tackle projects,
                      boosting my productivity and sparking incredible creativity. It's an absolute game-changer!"</p>
             </div>
             <div className='d-flex justify-content-between'>
@@ -171,7 +157,7 @@ function Signup() {
               <p className='fs-4 mb-0'>CEO of Monkeflow</p>
               </div>
               <div className=''>  
-              <svg className='mx-4' xmlns="http://www.w3.org/2000/svg" width="100%" height="30%" viewBox="0 0 108 20" fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
+               <svg className='mx-4' xmlns="http://www.w3.org/2000/svg" width="100%" height="30%" viewBox="0 0 108 20" fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
                 <g clip-path="url(#clip0_6170_170502)">
                 <path d="M9.53834 1.60996C9.70914 1.19932 10.2909 1.19932 10.4617 1.60996L12.5278 6.57744C12.5998 6.75056 12.7626 6.86885 12.9495 6.88383L18.3123 7.31376C18.7556 7.3493 18.9354 7.90256 18.5976 8.19189L14.5117 11.6919C14.3693 11.8139 14.3071 12.0053 14.3506 12.1876L15.5989 17.4208C15.7021 17.8534 15.2315 18.1954 14.8519 17.9635L10.2606 15.1592C10.1006 15.0615 9.89938 15.0615 9.73937 15.1592L5.14806 17.9635C4.76851 18.1954 4.29788 17.8534 4.40108 17.4208L5.64939 12.1876C5.69289 12.0053 5.6307 11.8139 5.48831 11.6919L1.40241 8.19189C1.06464 7.90256 1.24441 7.3493 1.68773 7.31376L7.05054 6.88383C7.23744 6.86885 7.40024 6.75056 7.47225 6.57744L9.53834 1.60996Z" fill="#F2F4F7"></path>
                 <g clip-path="url(#clip1_6170_170502)">
@@ -238,7 +224,7 @@ function Signup() {
               </div>
             </div>
             <div className='' style={{marginTop:'100px'}}>
-                <img src={LoginImg} height='170px' width='100%' alt="loginImg"/>
+                <img src={LoginImg} className='img-fluid' height='170px' width='100%' alt="loginImg"/>
               </div>
             </Col>
         </Row>

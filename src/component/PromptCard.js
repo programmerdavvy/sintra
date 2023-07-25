@@ -12,10 +12,8 @@ function PromptCard({prompts,handleSavePrompts}) {
                                to={`/prompt/${e.category.toLocaleLowerCase()}/${e.topic.toLocaleLowerCase().split(" ").join("-")}/${e.description.toLocaleLowerCase().split(" ").join("-")}`
                               } 
                                className='text-decoration-none text-light-emphasis'>
-                              <div>
-                              {React.createElement('h2', { dangerouslySetInnerHTML:{ __html:e.emojis }}, null) }
-                              </div>
-                               <div> <h5> {e.topic}</h5></div>                          
+                              <h2 dangerouslySetInnerHTML={{__html:e.emojis }}></h2>
+                               <h5> {e.topic}</h5>                          
                             <div>
                               <p className='fs-6 text-light-emphasis'> {e.description}</p>
                             </div></Link> 

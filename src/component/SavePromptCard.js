@@ -12,7 +12,7 @@ function SavePromptCard({prompts}) {
                           <div className='p-4 mb-3 mt-4' style={{border:'1px solid #eee',background:'#fff', borderRadius:'12px'}}>
                               <div>
                                 <h2>{e.icon}</h2>
-                              {React.createElement('h2', { dangerouslySetInnerHTML:{ __html:e.emojis }}, null) }
+                                <h2 dangerouslySetInnerHTML={{ __html:e.emojis }}></h2>
                               </div>
                                <div> <Link to={`/prompt/${e.category.toLocaleLowerCase()}/${e.topic.toLocaleLowerCase().split(" ").join("-")}`} 
                                className='text-decoration-none text-light-emphasis'><h5> {e.topic}</h5></Link> </div>                          

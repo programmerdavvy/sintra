@@ -4,20 +4,16 @@ import { Link } from 'react-router-dom';
 import { Col } from 'reactstrap';
 
 function PromptCard({prompts,handleSavePrompts}) {
-  return (
-    <>
-    {prompts.slice(0,500).map((e,i)=>{
+  return prompts && [...prompts].slice(0,500).map((e,i)=>{
       return(
-        <Col key={e.id} xl={4} sm={12} md={6}> 
+        <Col key={i} xl={4} sm={12} md={6}> 
                           <div className='p-4 mb-3 mt-4' style={{border:'1px solid #eee',background:'#fff', borderRadius:'12px'}}>
                           <Link 
                                to={`/prompt/${e.category.toLocaleLowerCase()}/${e.topic.toLocaleLowerCase().split(" ").join("-")}/${e.description.toLocaleLowerCase().split(" ").join("-")}`
                               } 
                                className='text-decoration-none text-light-emphasis'>
-                              <div>
-                              {React.createElement('h2', { dangerouslySetInnerHTML:{ __html:e.emojis }}, null) }
-                              </div>
-                               <div> <h5> {e.topic}</h5></div>                          
+                              <h2 dangerouslySetInnerHTML={{__html:e.emojis }}></h2>
+                               <h5> {e.topic}</h5>                          
                             <div>
                               <p className='fs-6 text-light-emphasis'> {e.description}</p>
                             </div></Link> 
@@ -29,11 +25,7 @@ function PromptCard({prompts,handleSavePrompts}) {
             </div>
         </Col>
       )
-    })}
-   
-        
-    </>
-  )
+    })
 }
 
 export default PromptCard

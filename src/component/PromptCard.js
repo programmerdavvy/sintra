@@ -4,9 +4,7 @@ import { Link } from 'react-router-dom';
 import { Col } from 'reactstrap';
 
 function PromptCard({prompts,handleSavePrompts}) {
-  return (
-    <>
-    {prompts.slice(0,500).map((e,i)=>{
+  return prompts && [...prompts].slice(0,500).map((e,i)=>{
       return(
         <Col key={i} xl={4} sm={12} md={6}> 
                           <div className='p-4 mb-3 mt-4' style={{border:'1px solid #eee',background:'#fff', borderRadius:'12px'}}>
@@ -29,11 +27,7 @@ function PromptCard({prompts,handleSavePrompts}) {
             </div>
         </Col>
       )
-    })}
-   
-        
-    </>
-  )
+    })
 }
 
 export default PromptCard

@@ -8,7 +8,7 @@ function PromptCard({prompts,handleSavePrompts}) {
     <>
     {prompts.slice(0,500).map((e,i)=>{
       return(
-        <Col key={e.id} xl={4} sm={12} md={6}> 
+        <Col key={i} xl={4} sm={12} md={6}> 
                           <div className='p-4 mb-3 mt-4' style={{border:'1px solid #eee',background:'#fff', borderRadius:'12px'}}>
                           <Link 
                                to={`/prompt/${e.category.toLocaleLowerCase()}/${e.topic.toLocaleLowerCase().split(" ").join("-")}/${e.description.toLocaleLowerCase().split(" ").join("-")}`

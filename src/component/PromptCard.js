@@ -15,7 +15,7 @@ function PromptCard({prompts,handleSavePrompts}) {
                               <h2 dangerouslySetInnerHTML={{__html:e.emojis }}></h2>
                                <h5> {e.topic}</h5>                          
                             <div>
-                              <p className='fs-6 text-light-emphasis'> {e.description}</p>
+                              <p className='fs-6 text-light-emphasis'> {e.description.slice(0, 90)}...</p>
                             </div></Link> 
                             <div className='d-flex align-items-center justify-content-between pt-3'>
                             <div className='mx-2 px-3 text-white' style={{background:e.colorcode,padding:'5px',fontSize:'12px',  borderRadius:'15px'}}>
@@ -27,5 +27,5 @@ function PromptCard({prompts,handleSavePrompts}) {
       )
     })
 }
-
+ 
 export default PromptCard

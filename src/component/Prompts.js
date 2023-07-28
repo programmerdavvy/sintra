@@ -28,7 +28,7 @@ function Prompts() {
   const [sortText, setSortText] = useState('Popularity');
   const [sortTexts, setSortTexts] = useState('Saves');
 
-  const [packs] = useState([]);
+  const [packs,setPacks] = useState([]);
   const [count, setCount] = useState(0);
   const [savedPromptCount, setSavedPromptCount] = useState('0');
   const [showmodal, setShowmodal] = useState(false);
@@ -96,107 +96,10 @@ function Prompts() {
       setCount(count - 1);
     }
   };
-  const sidebarMenu = [
-    {
-      title: 'Agency',
-      id: 1,
-    },
-    {
-      title: 'Assistants',
-      id: 2,
-    },
-    {
-      title: 'Business',
-      id: 3,
-    },
-    {
-      title: 'Copywriting',
-      id: 4,
-    },
-    {
-      title: 'HR',
-      id: 5,
-    },
-    {
-      title: 'Marketing',
-      id: 1,
-    },
-    {
-      title: 'Productivity',
-      id: 1,
-    },
-    {
-      title: 'Real Estate',
-      id: 1,
-    },
-    {
-      title: 'Sales',
-      id: 1,
-    },
-    {
-      title: 'Startups',
-      id: 1,
-    },
-    {
-      title: 'Support',
-      id: 1,
-    },
-    {
-      title: 'Web Development',
-      id: 1,
-    },
-  ];
-  const praompts = [
-    {
-      title: 'Becoming an expert in Chatgpt',
-      category: 'Business',
-      icon: '👨‍💻',
-      likes: '12',
-      id: 1,
-    },
-    {
-      title: 'Automating Instagram Growth',
-      category: 'Marketing',
-      likes: '12',
-      icon: '📈',
-      id: 2,
-    },
-    {
-      title: 'Developing a Brand Voice and Tone Guide',
-      category: 'Marketing',
-      likes: '12',
-      icon: '🔨',
-      id: 3,
-    },
-    {
-      title: 'Conducting market research for new leads',
-      category: 'Sales',
-      likes: '22',
-      icon: '🔬',
-      id: 4,
-    },
-    {
-      title: 'Analyzing Your Competition',
-      category: 'Business',
-      icon: '💥',
-      likes: '2',
-      id: 5,
-    },
-    {
-      title: 'Generating Instagram caption ideas',
-      category: 'Assistants',
-      icon: '🧢',
-      likes: '5',
-      id: 6,
-    },
-    {
-      title: 'Writing marketing emails',
-      category: 'Real Estate',
-      icon: '✉️',
-      likes: '12',
-      id: 6,
-    },
-  ];
+  
+  const clearFilters = () =>{
+        setPacks([])
+  }
   const searchPrompts = (e) => {
     let search = e;
     let filteredArray = [];
@@ -265,14 +168,14 @@ function Prompts() {
       </div>
       <div style={{ background: '#F9FAFB' }}>
         <div className='d-flex w-100'>
-          <div className='col-sm-3-l filterSide'>
-            <div className='nav-scroll pt-5'>
+          <div className=' col-sm-3-l filterSide'>
+            <div className='px-3 nav-scroll pt-5'>
               <div className='sidebar d-flex justify-content-between align-items-center'>
                 <div>
                   <h2>Filters</h2>
                 </div>
                 <div>
-                  <span className='text-light-emphasis fw-600 fs-6'>
+                  <span onClick={clearFilters} style={{cursor:"pointer"}} className='text-light-emphasis fw-600 fs-6'>
                     Clear all
                   </span>
                 </div>
@@ -297,11 +200,12 @@ function Prompts() {
                   className='text-decoration-none text-light-emphasis'
                 >
                   <div
-                    className='pt-2  pb-2 px-3 text-center mt-4 fw-600 fs-6 '
+                    className='pt-2  pb-2 px-3 text-center mt-4 fw-600 '
                     style={{
                       border: '1px solid #d0d5dd',
                       backgroundColor: '#fff',
                       borderRadius: '10px',
+                      fontSize:"12px"
                     }}
                   >
                     Saved Prompts{' '}
@@ -337,11 +241,9 @@ function Prompts() {
                     <div className='mt-2' key={e.category}>
                       <Link
                         id={`#${e.category}`}
-                        to={`#${e.category}`}
+                        to={`#${e.category.toLocaleLowerCase().split(" ").join("-")}`}
                         onClick={() => {
-                          let filteredPrompts = prompts.filter(
-                            (x) => x.category === e.category
-                          );
+                          let filteredPrompts = prompts.filter(x => x.category + ' ' + 'Pack' === e.category);
                           setFilteredPrompts(filteredPrompts);
                         }}
                         className='textdarklink text-decoration-none fw-600 fs-6'
@@ -370,10 +272,10 @@ function Prompts() {
                           className='sidebar-checkbox-icon'
                         />
                         <Link
-                          to={`#${e.category}`}
+                          to={`#${e.category.toLocaleLowerCase().split(" ").join("-")}`}
                           className='text-light-emphasis text-decoration-none fw-600 fs-6'
                         >
-                          {e.category} Packs 🏌️
+                          {e.category}  🏌️
                         </Link>
                       </div>
                     );
@@ -567,7 +469,7 @@ function Prompts() {
                           boxShadow: '0 1px 2px rgba(16,24,40,.05)',
                         }}
                       >
-                        {e} Pack🏌️{' '}
+                        {e} 🏌️{' '}
                         <X
                           size={20}
                           onClick={() => handleRemovePack(e, `checkbox-${e}`)}
@@ -625,10 +527,10 @@ function Prompts() {
                   <div className='mt-2' key={e.category}>
                     <Link
                       id={`#${e.category}`}
-                      to={`#${e.category}`}
+                      to={`#${e.category.toLocaleLowerCase().split(" ").join("-")}`}
                       onClick={() => {
                         let filteredPrompts = prompts.filter(
-                          (x) => x.category === e.category
+                          (x) =>  x.category + ' ' + 'Pack' === e.category
                         );
                         setFilteredPrompts(filteredPrompts);
                       }}
@@ -661,7 +563,7 @@ function Prompts() {
                         to={`#${e.category}`}
                         className='text-light-emphasis text-decoration-none fw-600 fs-6'
                       >
-                        {e.category} Packs 🏌️
+                        {e.category}  🏌️
                       </Link>
                     </div>
                   );

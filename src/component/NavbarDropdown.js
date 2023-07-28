@@ -8,7 +8,7 @@ function NavbarDropdown({activeUser}) {
     <div className='shadow pb-4 mb-4 bg-body rounded' style={{position:'absolute',width:'100%',padding:'15px'}}>
     <Row>
         <Col lg={4}>
-           <Link to='/prompt-packs' className='text-decoration-none'>
+           <Link to='https://nyxil.com/' className='text-decoration-none'>
            <Card style={{border:'none',cursor:'pointer'}} id='overlay'
              onMouseEnter={()=>{
                 let overlay = document.getElementById('overlay');
@@ -26,7 +26,7 @@ function NavbarDropdown({activeUser}) {
             </div>
                 <div className='px-4'>
                 <CardText className='text-capitalize fs-6 mb-1' style={{fontWeight:'600'}}>
-                    Nyxil Studio Prompts Packs
+                Buy nyxil Studio Access
                 </CardText>
                 <CardText className='fs-6 '>
                     Over 10,000+ Industrial-leading ChatGPT Prompts Bundle Packs

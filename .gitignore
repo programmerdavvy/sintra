@@ -7,7 +7,7 @@
 .vscode
 # testing
 /coverage
-
+/src/assets/data.js
 # production
 /build
 

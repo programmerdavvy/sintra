@@ -151,6 +151,14 @@ body{
 .textdarklink:focus{
   color: blue;
 }
+.dashboardHeader {
+  background-color: #39379e;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 1rem;
+  padding: 4rem;
+}
 .logins__tabs-menu {
   grid-column-gap: 16px;
   grid-row-gap: 16px;

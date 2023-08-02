@@ -9,7 +9,10 @@ function CopyRight() {
             <hr  style={{color:'gray'}}/>
             <Col xl={10} md={6} sm={12} className='pt-5'>
             <p className='fs-5 text-light-emphasis '>© 2023 Nyxil Studio. All rights reserved.</p>
-            <p style={{fontSize:"14px"}} className='text-light-emphasis'>Designed by  <a className='' target='_blank' href='https://bluefountaincreation.com'>https://bluefountaincreation.com</a></p>
+            {/* <p style={{fontSize:"14px"}} className='text-light-emphasis'>Designed by <a href='/#'>Christian</a> */}
+             {/* <a className='' target='_blank' href='https://bluefountaincreation.com'>https://bluefountaincreation.com</a> */}
+             
+             {/* </p> */}
             </Col>
 
             <Col xl={2} md={6}  sm={12} className='pt-5'>

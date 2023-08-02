@@ -275,7 +275,7 @@ function Prompts() {
                           to={`#${e.category.toLocaleLowerCase().split(" ").join("-")}`}
                           className='text-light-emphasis text-decoration-none fw-600 fs-6'
                         >
-                          {e.category}  🏌️
+                          {e.category}   <span dangerouslySetInnerHTML={{__html:e.emojis }}/>
                         </Link>
                       </div>
                     );
@@ -563,7 +563,7 @@ function Prompts() {
                         to={`#${e.category}`}
                         className='text-light-emphasis text-decoration-none fw-600 fs-6'
                       >
-                        {e.category}  🏌️
+                        {e.category}  <span dangerouslySetInnerHTML={{__html:e.emojis }}/>
                       </Link>
                     </div>
                   );
@@ -594,6 +594,10 @@ function Prompts() {
                   border: '1px solid #eee',
                   fontWeight: '600',
                   borderRadius: '15px',
+                }}
+                onClick={()=>{
+                  clearFilters();
+                  setShowmodal(!showmodal);
                 }}
               >
                 Clear Filters

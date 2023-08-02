@@ -7,13 +7,13 @@ function PromptCard({prompts,handleSavePrompts}) {
   return prompts && [...prompts].slice(0,500).map((e,i)=>{
       return(
         <Col key={i} xl={4} sm={12} md={6}> 
-                          <div className='p-4 mb-3 mt-4' style={{border:'1px solid #eee',background:'#fff', borderRadius:'12px'}}>
+                          <div className='p-4 mb-3 mt-4' style={{border:'1px solid #eee',height:'90%', background:'#fff', borderRadius:'12px'}}>
                           <Link 
                                to={`/prompt/${e.category.toLocaleLowerCase()}/${e.topic.toLocaleLowerCase().split(" ").join("-")}/${e.description.toLocaleLowerCase().split(" ").join("-")}`
                               } 
                                className='text-decoration-none text-light-emphasis'>
                               <h2 dangerouslySetInnerHTML={{__html:e.emojis }}></h2>
-                               <h5> {e.topic}</h5>                          
+                               <h5 className='text-capitalize'> {e.topic}</h5>                          
                             <div>
                               <p className='fs-6 text-light-emphasis'> {e.description.slice(0, 90)}...</p>
                             </div></Link> 

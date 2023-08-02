@@ -14,6 +14,7 @@ import Bots from './pages/Bots';
 import Account from './pages/Account';
 import SavedPrompts from './pages/SavedPrompts';
 import { useEffect } from 'react';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   const {pathname} = useLocation();
@@ -30,6 +31,7 @@ function App() {
           <Route index element={<WelcomePage />} />
         </Route>
         <Route path='/login' element={<Login />} />
+        <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/testing' element={<TabsFilled />} />
         <Route path='/prompt-packs' element={<PromptPack />} />
